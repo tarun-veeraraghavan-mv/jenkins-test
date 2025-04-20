@@ -1,9 +1,5 @@
 pipeline {
-	agent {
-    docker {
-      image 'tarun764/node-jenkin'
-    }
-  }
+	agent any
 
   environment {
     dockerHome = tool 'myDocker'
@@ -25,6 +21,28 @@ pipeline {
       steps {
         sh "npm install"
         sh "node app.js"
+      }
+    }
+
+    stage("Build docker image") {
+      steps {
+        echo "Building image..."
+        "docker build -t tarun764/node-jenkin:$env.BUILD_TAG"
+        script {
+          dockerImage = docker.build("tarun764/node-jenkin:${env.BUILD_TAG}")
+        }
+        echo "New image built..."
+      }
+    }
+
+    stage("Push docker image") {
+      steps {
+        script {
+          docker.withRegistry('', 'dockerhub') {
+            dockerImage.push();
+            dockerImage.push('latest');
+          }
+        }
       }
     }
   } 
