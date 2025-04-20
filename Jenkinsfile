@@ -1,7 +1,7 @@
 pipeline {
 	agent {
     docker {
-      image 'node:18'
+      image 'tarun764/node-jenkin'
     }
   }
 
@@ -12,7 +12,7 @@ pipeline {
   }
 
   stages {
-    stage("Build") {
+    stage("Checkout") {
       steps {
         echo "build"
         echo "$env.BUILD_NUMBER"
@@ -21,15 +21,10 @@ pipeline {
       }
     }
 
-    stage("Test") {
+    stage("Build") {
       steps {
-        echo "test"
-      }
-    }
-
-    stage("Intergration test") {
-      steps {
-        echo "test"
+        sh "npm install"
+        sh "npm run dev"
       }
     }
   } 
