@@ -1,15 +1,17 @@
 pipeline {
-	agent {
-    docker {
-      image 'node:18'
-    }
-  }
+	// agent {
+  //   docker {
+  //     image 'node:18'
+  //   }
+  // }
 
   stages {
     stage("Build") {
       steps {
         echo "build"
-        echo "test"
+        echo "$env.BUILD_NUMBER"
+        echo "BUILDID - $env.BUILD_ID"
+        echo "BUILD URL - $env.BUILD_URL"
       }
     }
 
